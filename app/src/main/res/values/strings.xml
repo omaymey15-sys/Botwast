@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BotWast</string>
+    
+    <!-- Main Activity -->
+    <string name="bot_title">🤖 BotWast - Centre de Contrôle</string>
+    <string name="bot_active">✅ Bot activé</string>
+    <string name="bot_inactive">❌ Bot désactivé</string>
+    <string name="service_active">Service actif</string>
+    <string name="waiting_messages">En attente de messages</string>
+    
+    <!-- Sections -->
+    <string name="authorized_contacts">👥 Contacts Autorisés</string>
+    <string name="active_rules">📝 Règles Actives</string>
+    <string name="statistics">📊 Statistiques</string>
+    
+    <!-- Buttons -->
+    <string name="add_rule">➕ Ajouter Règle</string>
+    <string name="settings">⚙️ Paramètres</string>
+    <string name="stats">📊 Stats</string>
+    <string name="edit">✏️ Modifier</string>
+    <string name="delete">🗑️ Supprimer</string>
+    <string name="add">✅ Ajouter</string>
+    <string name="cancel">❌ Annuler</string>
+    <string name="update">✅ Mettre à jour</string>
+    
+    <!-- Dialogs -->
+    <string name="add_rule_title">➕ Ajouter une Règle</string>
+    <string name="edit_rule_title">✏️ Modifier la Règle</string>
+    <string name="received_message">Message reçu :</string>
+    <string name="reply_message">Réponse :</string>
+    <string name="trigger_hint">ex: Salut</string>
+    <string name="response_hint">ex: Bonjour!</string>
+    
+    <!-- Settings -->
+    <string name="behavior">🎯 Comportement</string>
+    <string name="reply_delay">Délai réponse</string>
+    <string name="ignore_case">Ignorer majuscules</string>
+    <string name="random_reply">Réponse aléatoire</string>
+    <string name="quiet_mode">🔇 Mode Silencieux</string>
+    <string name="enable_quiet_mode">Activer mode silencieux</string>
+    <string name="quiet_start">Début</string>
+    <string name="quiet_end">Fin</string>
+    <string name="backup">💾 Sauvegarde</string>
+    <string name="export_config">📤 Exporter Configuration</string>
+    <string name="import_config">📥 Importer Configuration</string>
+    <string name="reset">🔄 Réinitialiser</string>
+    
+    <!-- Accessibility -->
+    <string name="arrow">Arrow</string>
+    <string name="contact_avatar">Contact Avatar</string>
+</resources>
