@@ -34,37 +34,9 @@ class RuleAdapter(
         holder.ruleText.text = "SI \"${rule.trigger}\" → \"${rule.response}\""
         holder.rulePriority.text = "Priorité: ${rule.priority}"
 
-        holder.editButton.setOnClickListener {
-            onEditRule(rule)
-        }
-
-        holder.deleteButton.setOnClickListener {
-            onDeleteRule(rule)
-        }
-
-        holder.itemView.setOnLongClickListener {
-            onEditRule(rule)
-            true
-        }
+        holder.editButton.setOnClickListener { onEditRule(rule) }
+        holder.deleteButton.setOnClickListener { onDeleteRule(rule) }
     }
 
     override fun getItemCount(): Int = rules.size
-
-    fun updateRules(newRules: List<MessageRule>) {
-        rules = newRules
-        notifyDataSetChanged()
-    }
-
-    fun addRule(rule: MessageRule) {
-        rules = rules + rule
-        notifyItemInserted(rules.size - 1)
-    }
-
-    fun removeRule(rule: MessageRule) {
-        val index = rules.indexOf(rule)
-        if (index != -1) {
-            rules = rules.toMutableList().apply { removeAt(index) }
-            notifyItemRemoved(index)
-        }
-    }
 }
