@@ -5,53 +5,58 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.botwast.databinding.ActivitySettingsBinding
 
 class SettingsActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var dataManager: DataManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         dataManager = DataManager(this)
+
         setupUI()
         loadSettings()
     }
 
     private fun setupUI() {
-        // Back Button
+
+        // BACK
         binding.backButton.setOnClickListener {
             finish()
         }
 
-        // Reply Delay Slider
+        // SLIDER (FIX IMPORTANT)
         binding.replyDelaySlider.apply {
             valueFrom = 0f
             valueTo = 5000f
             stepSize = 500f
-            setOnChangeListener { _, value, _ ->
+
+            addOnChangeListener { _, value, _ ->
                 dataManager.setReplyDelay(value.toLong())
                 updateDelayLabel(value.toLong())
             }
         }
 
-        // Case Sensitive Toggle
+        // CASE SENSITIVE
         binding.caseSensitiveSwitch.setOnCheckedChangeListener { _, isChecked ->
             dataManager.setCaseSensitive(isChecked)
         }
 
-        // Random Reply Toggle
+        // RANDOM REPLY
         binding.randomReplySwitch.setOnCheckedChangeListener { _, isChecked ->
             dataManager.setRandomReplyEnabled(isChecked)
         }
 
-        // Quiet Mode Toggle
+        // QUIET MODE
         binding.quietModeSwitch.setOnCheckedChangeListener { _, isChecked ->
             dataManager.setQuietModeEnabled(isChecked)
             binding.quietModeLayout.isEnabled = isChecked
         }
 
-        // Quiet Mode Start Time
+        // START TIME
         binding.quietStartTimeButton.setOnClickListener {
             showTimePickerDialog { time ->
                 dataManager.setQuietModeStart(time)
@@ -59,7 +64,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        // Quiet Mode End Time
+        // END TIME
         binding.quietEndTimeButton.setOnClickListener {
             showTimePickerDialog { time ->
                 dataManager.setQuietModeEnd(time)
@@ -67,17 +72,17 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        // Export Button
+        // EXPORT
         binding.exportButton.setOnClickListener {
             exportConfiguration()
         }
 
-        // Import Button
+        // IMPORT
         binding.importButton.setOnClickListener {
             importConfiguration()
         }
 
-        // Reset Button
+        // RESET
         binding.resetButton.setOnClickListener {
             resetSettings()
         }
@@ -85,6 +90,7 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun loadSettings() {
         binding.apply {
+
             replyDelaySlider.value = dataManager.getReplyDelay().toFloat()
             updateDelayLabel(dataManager.getReplyDelay())
 
@@ -102,19 +108,16 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun showTimePickerDialog(onTimeSelected: (String) -> Unit) {
-        // Simple time picker implementation
-        // You can use android.app.TimePickerDialog
+        // TEMP SIMPLE VERSION
         onTimeSelected("12:00")
     }
 
     private fun exportConfiguration() {
         val json = dataManager.exportConfiguration()
-        // Save to file or share
         android.util.Log.d("BotWast", "Export: $json")
     }
 
     private fun importConfiguration() {
-        // Load from file and import
         android.util.Log.d("BotWast", "Import")
     }
 
