@@ -24,6 +24,19 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
+    - name: Enable Data Binding in build.gradle
+      run: |
+        # Vérifier si dataBinding est déjà présent
+        if ! grep -q "dataBinding" app/build.gradle; then
+          # Ajouter dataBinding dans le bloc android
+          sed -i '/android {/a \    buildFeatures {\n        dataBinding = true\n    }' app/build.gradle
+        else
+          # Remplacer dataBinding false par true si nécessaire
+          sed -i 's/dataBinding = false/dataBinding = true/g' app/build.gradle
+        fi
+        echo "=== build.gradle (extrait) ==="
+        grep -A 3 "buildFeatures" app/build.gradle || echo "buildFeatures ajouté"
+
     - name: Fix item_rule.xml encoding
       run: |
         cat > app/src/main/res/layout/item_rule.xml << 'EOF'
