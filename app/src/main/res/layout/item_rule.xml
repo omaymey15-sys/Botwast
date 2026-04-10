@@ -1,44 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="12dp">
-
-    <TextView
-        android:id="@+id/rule_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Rule"
-        android:textSize="16sp" />
-
-    <TextView
-        android:id="@+id/rule_priority"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Priority"
-        android:textSize="12sp"
-        android:layout_marginTop="4dp" />
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="2dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        android:padding="12dp">
 
-        <Button
-            android:id="@+id/edit_button"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <!-- Rule Text -->
+        <TextView
+            android:id="@+id/rule_text"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Edit" />
+            android:text="SI \"Salut\" → \"Bonjour!\""
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/delete_button"
-            android:layout_width="0dp"
-            android:layout_weight="1"
+        <!-- Priority -->
+        <TextView
+            android:id="@+id/rule_priority"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delete" />
+            android:text="Priorité: 1"
+            android:textSize="12sp"
+            android:layout_marginTop="4dp" />
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:spacing="8dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/edit_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="✏️ Modifier"
+                android:textSize="12sp"
+                app:cornerRadius="4dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/delete_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="🗑️ Supprimer"
+                android:textSize="12sp"
+                app:cornerRadius="4dp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>
