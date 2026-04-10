@@ -1,36 +1,106 @@
-name: Clean Android Project
+name: Android CI - Fast Build
 
 on:
-  workflow_dispatch:
   push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
 
 jobs:
-  clean:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
-      - name: Setup JDK
-        uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: 17
+    - name: Setup Java JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
 
-      - name: Grant permissions
-        run: chmod +x gradlew
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
 
-      - name: Clean Gradle project
-        run: ./gradlew clean
+    - name: Fix item_rule.xml encoding
+      run: |
+        cat > app/src/main/res/layout/item_rule.xml << 'EOF'
+        <?xml version="1.0" encoding="utf-8"?>
+        <layout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+        
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
+        
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+        
+                    <TextView
+                        android:id="@+id/ruleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SI Salut - Bonjour"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+        
+                    <TextView
+                        android:id="@+id/rulePriority"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Priorite 1"
+                        android:textSize="12sp" />
+        
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+        
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/editButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:layout_weight="1"
+                            android:text="Modifier"
+                            android:textSize="12sp"
+                            app:cornerRadius="4dp" />
+        
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/deleteButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_weight="1"
+                            android:text="Supprimer"
+                            android:textSize="12sp"
+                            app:cornerRadius="4dp" />
+        
+                    </LinearLayout>
+        
+                </LinearLayout>
+        
+            </com.google.android.material.card.MaterialCardView>
+        
+        </layout>
+        EOF
 
-      - name: Delete additional caches
-        run: |
-          rm -rf ~/.gradle/caches
-          rm -rf ~/.gradle/daemon
-          rm -rf .gradle
-          rm -rf build
-          rm -rf app/build
+    - name: Build with Gradle
+      run: ./gradlew assembleDebug --no-daemon
 
-      - name: Verify clean build
-        run: ./gradlew assembleDebug
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: botwast-debug.apk
+        path: app/build/outputs/apk/debug/app-debug.apk
