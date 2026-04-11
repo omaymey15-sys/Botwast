@@ -109,3 +109,34 @@
     </LinearLayout>
 
 </LinearLayout>
+<!-- Statistics -->
+<com.google.android.material.card.MaterialCardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/stats_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="📊 Statistiques"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/stats_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Actualiser les stats"/>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
