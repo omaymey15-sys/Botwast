@@ -11,10 +11,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.botwast.adapters.ContactAdapter
+import com.example.botwast.adapters.RuleAdapter
 import com.example.botwast.databinding.ActivityMainBinding
+import com.example.botwast.dialogs.AddRuleDialog
+import com.example.botwast.dialogs.EditRuleDialog
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding: ActivityMainBinding
     private lateinit var dataManager: DataManager
     private lateinit var contactAdapter: ContactAdapter
@@ -23,11 +28,8 @@ class MainActivity : AppCompatActivity() {
     private val contactPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted ->
-        if (isGranted) {
-            loadContacts()
-        } else {
-            Toast.makeText(this, "Permission refusée", Toast.LENGTH_SHORT).show()
-        }
+        if (isGranted) loadContacts()
+        else Toast.makeText(this, "Permission refusée", Toast.LENGTH_SHORT).show()
     }
 
     private val notificationPermissionLauncher = registerForActivityResult(
@@ -40,10 +42,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         dataManager = DataManager(this)
+
         setupUI()
         checkPermissions()
         loadContacts()
@@ -52,21 +56,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-        // Bot Status Toggle
+
         binding.botSwitch.isChecked = dataManager.isBotEnabled()
+        updateBotStatus()
+
         binding.botSwitch.setOnCheckedChangeListener { _, isChecked ->
             dataManager.setBotEnabled(isChecked)
             updateBotStatus()
         }
 
-        // Contacts RecyclerView
+        // ✅ CONTACT ADAPTER (type ajouté)
         contactAdapter = ContactAdapter(
             contacts = emptyList(),
-            onContactSelected = { contact ->
+            onContactSelected = { contact: Contact ->
                 dataManager.addSelectedContact(contact.id)
                 Toast.makeText(this, "${contact.name} sélectionné", Toast.LENGTH_SHORT).show()
             },
-            onContactDeselected = { contact ->
+            onContactDeselected = { contact: Contact ->
                 dataManager.removeSelectedContact(contact.id)
                 Toast.makeText(this, "${contact.name} désélectionné", Toast.LENGTH_SHORT).show()
             }
@@ -77,11 +83,11 @@ class MainActivity : AppCompatActivity() {
             adapter = contactAdapter
         }
 
-        // Rules RecyclerView
+        // ✅ RULE ADAPTER (type ajouté)
         ruleAdapter = RuleAdapter(
             rules = emptyList(),
-            onEditRule = { rule -> showEditRuleDialog(rule) },
-            onDeleteRule = { rule -> deleteRule(rule) }
+            onEditRule = { rule: MessageRule -> showEditRuleDialog(rule) },
+            onDeleteRule = { rule: MessageRule -> deleteRule(rule) }
         )
 
         binding.rulesRecyclerView.apply {
@@ -89,24 +95,20 @@ class MainActivity : AppCompatActivity() {
             adapter = ruleAdapter
         }
 
-        // Add Rule Button
         binding.addRuleButton.setOnClickListener {
             showAddRuleDialog()
         }
 
-        // Settings Button
         binding.settingsButton.setOnClickListener {
             openSettings()
         }
 
-        // Statistics Button
         binding.statsButton.setOnClickListener {
             showStatisticsDialog()
         }
     }
 
     private fun checkPermissions() {
-        // Contact Permission
         if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.READ_CONTACTS
@@ -115,7 +117,6 @@ class MainActivity : AppCompatActivity() {
             contactPermissionLauncher.launch(Manifest.permission.READ_CONTACTS)
         }
 
-        // Notification Permission (Android 13+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(
                     this,
@@ -131,8 +132,11 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val contacts = ContactHelper.getContacts(this@MainActivity)
                 .map { contact ->
-                    contact.copy(isSelected = dataManager.isContactSelected(contact.id))
+                    contact.copy(
+                        isSelected = dataManager.isContactSelected(contact.id)
+                    )
                 }
+
             contactAdapter.updateContacts(contacts)
         }
     }
@@ -147,22 +151,25 @@ class MainActivity : AppCompatActivity() {
     private fun loadStatistics() {
         lifecycleScope.launch {
             val stats = dataManager.getStatistics()
+
             binding.statsText.text = """
                 📊 Statistiques
                 Messages reçus: ${stats.totalReceived}
                 Réponses envoyées: ${stats.totalReplied}
                 Taux de réponse: ${
-                if (stats.totalReceived > 0) 
-                    ((stats.totalReplied * 100) / stats.totalReceived) 
+                if (stats.totalReceived > 0)
+                    (stats.totalReplied * 100 / stats.totalReceived)
                 else 0
-                }%
+            }%
             """.trimIndent()
         }
     }
 
     private fun showAddRuleDialog() {
-        val dialog = AddRuleDialog(this) { trigger, response ->
+        val dialog = AddRuleDialog(this) { trigger: String, response: String ->
+
             val selectedContacts = dataManager.getSelectedContacts()
+
             if (selectedContacts.isEmpty()) {
                 Toast.makeText(this, "Sélectionnez d'abord un contact", Toast.LENGTH_SHORT).show()
                 return@AddRuleDialog
@@ -175,22 +182,31 @@ class MainActivity : AppCompatActivity() {
                     response = response,
                     priority = dataManager.getRulesForContact(contactId).size
                 )
+
                 dataManager.addRule(rule)
             }
 
             loadRules()
             Toast.makeText(this, "Règle ajoutée", Toast.LENGTH_SHORT).show()
         }
+
         dialog.show()
     }
 
     private fun showEditRuleDialog(rule: MessageRule) {
-        val dialog = EditRuleDialog(this, rule) { trigger, response ->
-            val updatedRule = rule.copy(trigger = trigger, response = response)
+        val dialog = EditRuleDialog(this, rule) { trigger: String, response: String ->
+
+            val updatedRule = rule.copy(
+                trigger = trigger,
+                response = response
+            )
+
             dataManager.updateRule(rule, updatedRule)
             loadRules()
+
             Toast.makeText(this, "Règle modifiée", Toast.LENGTH_SHORT).show()
         }
+
         dialog.show()
     }
 
@@ -201,11 +217,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateBotStatus() {
-        binding.botStatusText.text = if (dataManager.isBotEnabled()) {
-            "✅ Bot activé"
-        } else {
-            "❌ Bot désactivé"
-        }
+        binding.botStatusText.text =
+            if (dataManager.isBotEnabled()) "✅ Bot activé"
+            else "❌ Bot désactivé"
     }
 
     private fun openSettings() {
@@ -213,7 +227,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showStatisticsDialog() {
-        // Implementation for statistics dialog
         Toast.makeText(this, "Statistiques", Toast.LENGTH_SHORT).show()
     }
 
