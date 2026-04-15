@@ -24,33 +24,36 @@ class GameActivity : AppCompatActivity() {
         setContentView(R.layout.activity_game)
 
         gameContainer = findViewById(R.id.gameContainer)
-        
-        // Créer le canvas de jeu
+
+        // 🎮 Input system
+        inputManager = InputManager(GameEngine)
+        gamepadManager = GamepadManager(inputManager)
+
+        // 🎮 Game canvas
         gameCanvas = GameCanvasView(this)
         gameContainer.addView(gameCanvas)
 
-        // Créer l'overlay PSP
+        // 🎮 PSP overlay
         pspOverlay = PSPOverlay(this) { action ->
             inputManager.sendAction(action)
         }
         gameContainer.addView(pspOverlay)
 
-        // Initialiser les managers
-        inputManager = InputManager(GameEngine)
-        gamepadManager = GamepadManager(inputManager)
-
-        // Charger le jeu
+        // 🎮 Load game
         val gameName = intent.getStringExtra("game_name") ?: "default"
         GameEngine.loadGame(this, gameName)
-        
-        // Lancer la boucle de rendu
+
+        // 🎮 Start loop
         gameCanvas.setGameEngine(GameEngine)
         gameCanvas.startGameLoop()
     }
 
+    // ✅ FIX TOUCH (IMPORTANT)
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-        pspOverlay.onTouchEvent(event)
-        return super.onTouchEvent(event)
+        event?.let {
+            pspOverlay.onTouchEvent(it)
+        }
+        return true
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
