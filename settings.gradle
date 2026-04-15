@@ -5,17 +5,12 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
-
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-        maven { url "https://artifacts.ironsrc.com/maven" }
     }
 }
-
-rootProject.name = "BotWast"
-
+rootProject.name = "Console2D"
 include ':app'
