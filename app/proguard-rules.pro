@@ -1,23 +1,8 @@
-# Keep model classes
--keep class com.example.botwast.MessageRule { *; }
--keep class com.example.botwast.Contact { *; }
--keep class com.example.botwast.Statistics { *; }
--keep class com.example.botwast.ContactStat { *; }
+# Add project specific ProGuard rules here.
+# By default, the flags in this file are appended to flags specified
+# in ${sdk.dir}/tools/proguard/proguard-android.txt
+# You can edit the include path and order by changing the proguardFiles
+# directive in build.gradle.
 
-# Keep services
--keep class com.example.botwast.WhatsAppListener { *; }
--keep class com.example.botwast.BootReceiver { *; }
-
-# Gson
--keep class com.google.gson.** { *; }
--keep class * extends com.google.gson.TypeAdapter
--keepclassmembers class * {
-    @com.google.gson.annotations.SerializedName <fields>;
-}
-
-# Coroutines
--keep class kotlinx.coroutines.** { *; }
-
-# Kotlin
--keep class kotlin.** { *; }
--keep class kotlin.jvm.internal.** { *; }
+# Add any project specific keep options here:
+-keep class org.json.** { *; }
