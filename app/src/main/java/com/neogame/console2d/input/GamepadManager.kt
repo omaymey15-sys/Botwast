@@ -1,7 +1,8 @@
 package com.neogame.console2d.input
 
-import android.view.KeyEvent
 import android.util.Log
+import android.view.KeyEvent
+import android.view.MotionEvent
 
 class GamepadManager(private val inputManager: InputManager) {
 
@@ -20,7 +21,7 @@ class GamepadManager(private val inputManager: InputManager) {
     fun onMotionEvent(event: MotionEvent) {
         val dx = event.getAxisValue(MotionEvent.AXIS_X)
         val dy = event.getAxisValue(MotionEvent.AXIS_Y)
-        
+
         if (dx != 0f || dy != 0f) {
             inputManager.sendJoystickInput(dx, dy)
         }
@@ -44,5 +45,3 @@ class GamepadManager(private val inputManager: InputManager) {
         }
     }
 }
-
-import android.view.MotionEvent
