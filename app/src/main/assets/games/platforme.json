@@ -1,0 +1,54 @@
+{
+  "type": "vehicle_4d",
+  "id": "neo_car_4d",
+  "name": "Neo 4D Car",
+
+  "model": {
+    "file": "car.obj",
+    "texture": "car.png"
+  },
+
+  "transform": {
+    "position": { "x": 0, "y": 0, "z": 0 },
+    "rotation": { "x": 0, "y": 0, "z": 0 },
+    "scale": { "x": 1, "y": 1, "z": 1 }
+  },
+
+  "physics": {
+    "speed": 0,
+    "max_speed": 30,
+    "acceleration": 1.2,
+    "brake": 2.0,
+    "turn_speed": 3.5,
+    "friction": 0.97
+  },
+
+  "time_state": {
+    "drift_mode": false,
+    "boost_mode": false,
+    "damage": 0,
+    "engine_heat": 0,
+    "nitro": 100
+  },
+
+  "input_map": {
+    "MOVE_UP": "accelerate()",
+    "MOVE_DOWN": "brake()",
+    "MOVE_LEFT": "turnLeft()",
+    "MOVE_RIGHT": "turnRight()",
+
+    "ACTION_A": "handbrake()",
+    "ACTION_B": "boost()",
+    "ACTION_X": "driftToggle()",
+    "ACTION_Y": "repair()",
+
+    "MENU": "openMenu()"
+  },
+
+  "camera": {
+    "type": "follow_dynamic",
+    "distance": 6,
+    "height": 3,
+    "shake_intensity": 0.2
+  }
+}
