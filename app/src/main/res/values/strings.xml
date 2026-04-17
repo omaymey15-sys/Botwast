@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">🎮 ConsolePSP</string>
+    <string name="main_title">ConsolePSP</string>
+    <string name="add_game">➕ Ajouter Jeu</string>
+    <string name="play">▶️ Jouer</string>
+    <string name="loading">⏳ Chargement...</string>
+    <string name="error">❌ Erreur</string>
+    <string name="success">✅ Succès</string>
+</resources>
