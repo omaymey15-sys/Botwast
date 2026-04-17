@@ -1,144 +1,270 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#000000">
+<?xml version="1.0" encoding="utf-8"?>    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"    
+android:layout_width="match_parent"    
+android:layout_height="match_parent"    
+android:background="#000000"    
+android:id="@+id/gameContainer">
 
-    <!-- 🎮 GAME CANVAS -->
-    <FrameLayout
-        android:id="@+id/gameCanvasContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#111111" />
+<!-- Game Canvas -->    
+<FrameLayout    
+    android:id="@+id/gameCanvasContainer"    
+    android:layout_width="match_parent"    
+    android:layout_height="match_parent"    
+    android:layout_above="@+id/controlsPanel"    
+    android:background="#111111" />    
 
-    <!-- 🎮 OVERLAY CONTROLS -->
-    <FrameLayout
-        android:id="@+id/controlsOverlay"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+<!-- Controls Panel -->    
+<LinearLayout    
+    android:id="@+id/controlsPanel"    
+    android:layout_width="match_parent"    
+    android:layout_height="200dp"    
+    android:layout_alignParentBottom="true"    
+    android:background="#0d0d0d"    
+    android:orientation="horizontal"    
+    android:padding="12dp"    
+    android:gravity="center_vertical"    
+    android:divider="@drawable/divider_vertical"    
+    android:showDividers="middle">    
 
-        <!-- 🕹️ JOYSTICK (LEFT BOTTOM) -->
-        <ImageView
-            android:id="@+id/joystickBase"
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:layout_gravity="bottom|start"
-            android:layout_margin="28dp"
-            android:alpha="0.25"
-            android:src="@drawable/joystick_bg" />
+    <!-- JOYSTICK LEFT -->    
+    <FrameLayout    
+        android:layout_width="100dp"    
+        android:layout_height="100dp"    
+        android:layout_weight="0.9"    
+        android:layout_margin="6dp">    
 
-        <ImageView
-            android:id="@+id/joystickStick"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom|start"
-            android:layout_margin="58dp"
-            android:alpha="0.35"
-            android:src="@drawable/joystick_stick" />
+        <View    
+            android:layout_width="90dp"    
+            android:layout_height="90dp"    
+            android:layout_gravity="center"    
+            android:background="@drawable/joystick_bg" />    
 
-        <!-- 🎮 D-PAD (OPTION LEFT) -->
-        <ImageButton
-            android:id="@+id/dpad"
-            android:layout_width="140dp"
-            android:layout_height="140dp"
-            android:layout_gravity="bottom|start"
-            android:layout_margin="160dp"
-            android:alpha="0.22"
-            android:background="@android:color/transparent"
-            android:src="@drawable/dpad" />
+        <View    
+            android:id="@+id/joystickStick"    
+            android:layout_width="45dp"    
+            android:layout_height="45dp"    
+            android:layout_gravity="center"    
+            android:background="@drawable/joystick_stick" />    
 
-        <!-- 🔴 BUTTON X -->
-        <ImageButton
-            android:id="@+id/buttonX"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="30dp"
-            android:alpha="0.30"
-            android:background="@android:color/transparent"
-            android:src="@drawable/btn_x" />
+    </FrameLayout>    
 
-        <!-- 🔵 BUTTON O -->
-        <ImageButton
-            android:id="@+id/buttonO"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="90dp"
-            android:layout_marginEnd="85dp"
-            android:alpha="0.30"
-            android:background="@android:color/transparent"
-            android:src="@drawable/btn_o" />
+    <!-- D-PAD CENTER -->    
+    <LinearLayout    
+        android:layout_width="70dp"    
+        android:layout_height="100dp"    
+        android:layout_weight="0.7"    
+        android:orientation="vertical"    
+        android:gravity="center"    
+        android:layout_margin="4dp">    
 
-        <!-- 🟩 BUTTON □ -->
-        <ImageButton
-            android:id="@+id/buttonSquare"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="90dp"
-            android:layout_marginEnd="10dp"
-            android:alpha="0.30"
-            android:background="@android:color/transparent"
-            android:src="@drawable/btn_square" />
+        <Button    
+            android:id="@+id/dpadUp"    
+            android:layout_width="35dp"    
+            android:layout_height="28dp"    
+            android:text="↑"    
+            android:textSize="14sp"    
+            android:textStyle="bold"    
+            android:textColor="#000000"    
+            android:background="#2196F3"    
+            android:layout_marginBottom="2dp" />    
 
-        <!-- 🔺 BUTTON △ -->
-        <ImageButton
-            android:id="@+id/buttonTriangle"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom|end"
-            android:layout_marginBottom="150dp"
-            android:layout_marginEnd="50dp"
-            android:alpha="0.30"
-            android:background="@android:color/transparent"
-            android:src="@drawable/btn_triangle" />
+        <LinearLayout    
+            android:layout_width="match_parent"    
+            android:layout_height="wrap_content"    
+            android:orientation="horizontal"    
+            android:gravity="center"    
+            android:layout_marginVertical="2dp">    
 
-        <!-- 🟡 START -->
-        <TextView
-            android:id="@+id/buttonStart"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
-            android:text="START"
-            android:textColor="#FFFFFF"
-            android:alpha="0.25"
-            android:layout_gravity="bottom|center"
-            android:layout_marginBottom="20dp" />
+            <Button    
+                android:id="@+id/dpadLeft"    
+                android:layout_width="28dp"    
+                android:layout_height="35dp"    
+                android:text="←"    
+                android:textSize="14sp"    
+                android:textStyle="bold"    
+                android:textColor="#000000"    
+                android:background="#2196F3"    
+                android:layout_marginEnd="2dp" />    
 
-        <!-- ⚪ SELECT -->
-        <TextView
-            android:id="@+id/buttonSelect"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
-            android:text="SEL"
-            android:textColor="#FFFFFF"
-            android:alpha="0.25"
-            android:layout_gravity="bottom|center"
-            android:layout_marginBottom="20dp"
-            android:layout_marginStart="90dp" />
+            <Button    
+                android:id="@+id/dpadRight"    
+                android:layout_width="28dp"    
+                android:layout_height="35dp"    
+                android:text="→"    
+                android:textSize="14sp"    
+                android:textStyle="bold"    
+                android:textColor="#000000"    
+                android:background="#2196F3"    
+                android:layout_marginStart="2dp" />    
 
-        <!-- 🟣 L -->
-        <TextView
-            android:id="@+id/buttonL1"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
-            android:text="L"
-            android:textColor="#FFFFFF"
-            android:alpha="0.25"
-            android:layout_gravity="top|start"
-            android:layout_margin="20dp" />
+        </LinearLayout>    
 
-        <!-- 🟣 R -->
-        <TextView
-            android:id="@+id/buttonR1"
-            android:layout_width="60dp"
-            android:layout_height="30dp"
-            android:text="R"
-            android:textColor="#FFFFFF"
-            android:alpha="0.25"
-            android:layout_gravity="top|end"
-            android:layout_margin="20dp" />
+        <Button    
+            android:id="@+id/dpadDown"    
+            android:layout_width="35dp"    
+            android:layout_height="28dp"    
+            android:text="↓"    
+            android:textSize="14sp"    
+            android:textStyle="bold"    
+            android:textColor="#000000"    
+            android:background="#2196F3"    
+            android:layout_marginTop="2dp" />    
 
-    </FrameLayout>
+    </LinearLayout>    
 
-</FrameLayout>
+    <!-- ACTION BUTTONS RIGHT -->    
+    <FrameLayout    
+        android:layout_width="95dp"    
+        android:layout_height="100dp"    
+        android:layout_weight="0.9"    
+        android:layout_margin="6dp"    
+        android:gravity="center">    
+
+        <LinearLayout    
+            android:layout_width="match_parent"    
+            android:layout_height="match_parent"    
+            android:orientation="vertical"    
+            android:gravity="center"    
+            android:layout_gravity="center">    
+
+            <LinearLayout    
+                android:layout_width="match_parent"    
+                android:layout_height="wrap_content"    
+                android:orientation="horizontal"    
+                android:gravity="center"    
+                android:layout_marginBottom="3dp">    
+
+                <Button    
+                    android:id="@+id/buttonX"    
+                    android:layout_width="32dp"    
+                    android:layout_height="32dp"    
+                    android:text="X"    
+                    android:textColor="#FFFFFF"    
+                    android:textStyle="bold"    
+                    android:textSize="12sp"    
+                    android:background="#FF6B6B"    
+                    android:layout_marginEnd="6dp" />    
+
+                <Button    
+                    android:id="@+id/buttonY"    
+                    android:layout_width="32dp"    
+                    android:layout_height="32dp"    
+                    android:text="Y"    
+                    android:textColor="#FFFFFF"    
+                    android:textStyle="bold"    
+                    android:textSize="12sp"    
+                    android:background="#FFD700"    
+                    android:layout_marginStart="6dp" />    
+
+            </LinearLayout>    
+
+            <LinearLayout    
+                android:layout_width="match_parent"    
+                android:layout_height="wrap_content"    
+                android:orientation="horizontal"    
+                android:gravity="center"    
+                android:layout_marginTop="3dp">    
+
+                <Button    
+                    android:id="@+id/buttonA"    
+                    android:layout_width="32dp"    
+                    android:layout_height="32dp"    
+                    android:text="A"    
+                    android:textColor="#000000"    
+                    android:textStyle="bold"    
+                    android:textSize="12sp"    
+                    android:background="#00CC00"    
+                    android:layout_marginEnd="6dp" />    
+
+                <Button    
+                    android:id="@+id/buttonB"    
+                    android:layout_width="32dp"    
+                    android:layout_height="32dp"    
+                    android:text="B"    
+                    android:textColor="#FFFFFF"    
+                    android:textStyle="bold"    
+                    android:textSize="12sp"    
+                    android:background="#0066FF"    
+                    android:layout_marginStart="6dp" />    
+
+            </LinearLayout>    
+
+        </LinearLayout>    
+
+    </FrameLayout>    
+
+    <!-- SPECIAL BUTTONS -->    
+    <LinearLayout    
+        android:layout_width="105dp"    
+        android:layout_height="100dp"    
+        android:layout_weight="1"    
+        android:orientation="vertical"    
+        android:gravity="center"    
+        android:layout_margin="6dp">    
+
+        <LinearLayout    
+            android:layout_width="match_parent"    
+            android:layout_height="wrap_content"    
+            android:orientation="horizontal"    
+            android:gravity="center"    
+            android:layout_marginBottom="6dp">    
+
+            <Button    
+                android:id="@+id/buttonL1"    
+                android:layout_width="38dp"    
+                android:layout_height="28dp"    
+                android:text="L1"    
+                android:textSize="9sp"    
+                android:textStyle="bold"    
+                android:textColor="#FFFFFF"    
+                android:background="#9C27B0"    
+                android:layout_marginEnd="3dp" />    
+
+            <Button    
+                android:id="@+id/buttonR1"    
+                android:layout_width="38dp"    
+                android:layout_height="28dp"    
+                android:text="R1"    
+                android:textSize="9sp"    
+                android:textStyle="bold"    
+                android:textColor="#FFFFFF"    
+                android:background="#9C27B0"    
+                android:layout_marginStart="3dp" />    
+
+        </LinearLayout>    
+
+        <LinearLayout    
+            android:layout_width="match_parent"    
+            android:layout_height="wrap_content"    
+            android:orientation="horizontal"    
+            android:gravity="center"    
+            android:layout_marginTop="6dp">    
+
+            <Button    
+                android:id="@+id/buttonSelect"    
+                android:layout_width="42dp"    
+                android:layout_height="26dp"    
+                android:text="SEL"    
+                android:textSize="8sp"    
+                android:textStyle="bold"    
+                android:textColor="#000000"    
+                android:background="#CCCCCC"    
+                android:layout_marginEnd="3dp" />    
+
+            <Button    
+                android:id="@+id/buttonStart"    
+                android:layout_width="42dp"    
+                android:layout_height="26dp"    
+                android:text="STR"    
+                android:textSize="8sp"    
+                android:textStyle="bold"    
+                android:textColor="#FFFFFF"    
+                android:background="#FF5722"    
+                android:layout_marginStart="3dp" />    
+
+        </LinearLayout>    
+
+    </LinearLayout>    
+
+</LinearLayout>
+
+</RelativeLayout>
