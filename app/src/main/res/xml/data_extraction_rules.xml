@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<data-extraction-rules>
-    <domain-config evolved="true">
-        <domain name="sharedpref">
-            <path name="default" />
-        </domain>
-    </domain-config>
-</data-extraction-rules>

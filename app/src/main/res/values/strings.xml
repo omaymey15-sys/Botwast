@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="app_name">Console2D</string>
-    <string name="game_menu">Sélectionne un jeu</string>
-    <string name="start_game">Lancer</string>
-    <string name="refresh">Rafraîchir</string>
-</resources>
