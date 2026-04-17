@@ -1,0 +1,80 @@
+{
+  "name": "RPG Adventure",
+  "version": "1.0.0",
+  "author": "Console2D",
+  "description": "Explore the world and complete quests",
+  "start_scene": "village",
+  "scenes": {
+    "village": {
+      "name": "Village",
+      "text": "You are in a peaceful village",
+      "background": "#90EE90",
+      "objects": [
+        {
+          "type": "npc",
+          "x": 150,
+          "y": 300,
+          "width": 40,
+          "height": 60,
+          "color": -1
+        },
+        {
+          "type": "building_shop",
+          "x": 350,
+          "y": 350,
+          "width": 100,
+          "height": 100,
+          "color": -16711936
+        },
+        {
+          "type": "forest_entrance",
+          "x": 600,
+          "y": 300,
+          "width": 120,
+          "height": 120,
+          "color": -2894856
+        }
+      ],
+      "inputs": {
+        "DPAD_LEFT": "move(-15, 0)",
+        "DPAD_RIGHT": "move(15, 0)",
+        "DPAD_UP": "move(0, -15)",
+        "DPAD_DOWN": "move(0, 15)",
+        "BUTTON_A": "interact()",
+        "BUTTON_B": "openMenu()"
+      }
+    },
+    "forest": {
+      "name": "Dark Forest",
+      "text": "A dark forest awaits...",
+      "background": "#228B22",
+      "objects": [
+        {
+          "type": "enemy",
+          "x": 350,
+          "y": 250,
+          "width": 50,
+          "height": 50,
+          "color": -65536
+        },
+        {
+          "type": "treasure",
+          "x": 700,
+          "y": 450,
+          "width": 40,
+          "height": 40,
+          "color": -256
+        }
+      ],
+      "inputs": {
+        "BUTTON_A": "attack()",
+        "BUTTON_X": "skill()",
+        "BUTTON_B": "defend()",
+        "DPAD_LEFT": "move(-15, 0)",
+        "DPAD_RIGHT": "move(15, 0)",
+        "DPAD_UP": "move(0, -15)",
+        "DPAD_DOWN": "move(0, 15)"
+      }
+    }
+  }
+}
