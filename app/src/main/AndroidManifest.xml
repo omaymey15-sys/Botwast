@@ -2,54 +2,51 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- Storage Permissions -->
+    <!-- Permissions essentielles -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- Stockage (optionnel pour jeux) -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE" />
 
-    <!-- Internet Permission -->
-    <uses-permission android:name="android.permission.INTERNET" />
-
-    <!-- Gamepad Features -->
+    <!-- Gamepad support -->
     <uses-feature
         android:name="android.hardware.gamepad"
         android:required="false" />
+
     <uses-feature
         android:name="android.hardware.bluetooth"
         android:required="false" />
 
     <application
         android:allowBackup="true"
-        android:dataExtractionRules="@xml/data_extraction_rules"
-        android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Console2D"
+        android:hardwareAccelerated="true"
         tools:targetApi="34">
 
-        <!-- Splash Screen Activity -->
+        <!-- Splash Screen -->
         <activity
             android:name=".SplashActivity"
             android:exported="true"
-            android:screenOrientation="landscape"
-            android:theme="@style/Theme.Console2D.Fullscreen">
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- Main Menu Activity -->
+        <!-- Menu principal -->
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
-        <!-- Game Activity -->
+        <!-- Gameplay -->
         <activity
             android:name=".GameActivity"
             android:exported="true"
@@ -57,7 +54,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true" />
 
-        <!-- Settings Activity -->
+        <!-- Settings -->
         <activity
             android:name=".SettingsActivity"
             android:exported="true"
