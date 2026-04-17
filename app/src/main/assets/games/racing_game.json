@@ -1,0 +1,63 @@
+{
+  "name": "Speed Racing",
+  "version": "1.0.0",
+  "author": "Console2D",
+  "description": "Race against the clock",
+  "start_scene": "race",
+  "scenes": {
+    "race": {
+      "name": "Grand Prix",
+      "text": "Win the race!",
+      "background": "#8B7355",
+      "objects": [
+        {
+          "type": "road",
+          "x": 0,
+          "y": 150,
+          "width": 800,
+          "height": 400,
+          "color": -10066330
+        },
+        {
+          "type": "road_stripe",
+          "x": 390,
+          "y": 150,
+          "width": 20,
+          "height": 400,
+          "color": -1
+        },
+        {
+          "type": "obstacle",
+          "x": 300,
+          "y": 250,
+          "width": 50,
+          "height": 50,
+          "color": -16711681
+        },
+        {
+          "type": "obstacle",
+          "x": 500,
+          "y": 350,
+          "width": 50,
+          "height": 50,
+          "color": -16711681
+        },
+        {
+          "type": "finish_line",
+          "x": 0,
+          "y": 100,
+          "width": 800,
+          "height": 30,
+          "color": -256
+        }
+      ],
+      "inputs": {
+        "DPAD_LEFT": "turnLeft()",
+        "DPAD_RIGHT": "turnRight()",
+        "BUTTON_A": "accelerate()",
+        "BUTTON_B": "brake()",
+        "JOYSTICK": "steer(dx, dy)"
+      }
+    }
+  }
+}
