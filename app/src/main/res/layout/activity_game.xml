@@ -124,7 +124,7 @@
                 android:layout_height="90dp"
                 android:layout_gravity="center">
 
-                <!-- Triangle -->
+                <!-- Triangle (Y) -->
                 <Button
                     android:id="@+id/buttonY"
                     android:layout_width="35dp"
@@ -137,7 +137,7 @@
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentTop="true" />
 
-                <!-- Carré -->
+                <!-- Carré (X) -->
                 <Button
                     android:id="@+id/buttonX"
                     android:layout_width="35dp"
@@ -150,7 +150,7 @@
                     android:layout_alignParentLeft="true"
                     android:layout_centerVertical="true" />
 
-                <!-- Rond -->
+                <!-- Rond (B) -->
                 <Button
                     android:id="@+id/buttonB"
                     android:layout_width="35dp"
@@ -163,7 +163,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true" />
 
-                <!-- Croix -->
+                <!-- Croix (A) -->
                 <Button
                     android:id="@+id/buttonA"
                     android:layout_width="35dp"
@@ -190,7 +190,7 @@
             android:layout_margin="6dp"
             android:alpha="0.5">
 
-            <!-- L et R -->
+            <!-- L1 et R1 (noms conservés pour compatibilité) -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -199,7 +199,7 @@
                 android:layout_marginBottom="8dp">
 
                 <Button
-                    android:id="@+id/buttonL"
+                    android:id="@+id/buttonL1"
                     android:layout_width="45dp"
                     android:layout_height="30dp"
                     android:text="L"
@@ -210,7 +210,7 @@
                     android:layout_marginEnd="8dp" />
 
                 <Button
-                    android:id="@+id/buttonR"
+                    android:id="@+id/buttonR1"
                     android:layout_width="45dp"
                     android:layout_height="30dp"
                     android:text="R"
