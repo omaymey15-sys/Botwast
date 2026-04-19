@@ -3,30 +3,53 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/gradient_background">
+    android:background="#121212">
 
-    <ImageView
-        android:id="@+id/game_thumbnail"
+    <!-- HEADER -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop"
-        android:background="@drawable/game_thumbnail_placeholder" />
+        android:layout_height="60dp"
+        android:background="#1E1E1E">
 
-    <TextView
-        android:id="@+id/game_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="@color/text_primary"
-        android:padding="16dp" />
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Console PSP"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF" />
 
-    <TextView
-        android:id="@+id/game_description"
+        <Button
+            android:id="@+id/btn_add_game"
+            android:layout_width="48dp"
+            android:layout_height="40dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="12dp"
+            android:text="➕"
+            android:textSize="18sp"
+            android:textColor="#FFFFFF"
+            android:background="#3F51B5" />
+
+    </FrameLayout>
+
+    <!-- LOADING -->
+    <ProgressBar
+        android:id="@+id/progress_loading"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <!-- GRID -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/games_grid"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:textColor="@color/text_secondary"
-        android:padding="16dp" />
+        android:padding="10dp"
+        android:clipToPadding="false"
+        android:background="#000000" />
 
 </LinearLayout>
