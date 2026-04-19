@@ -1,4 +1,4 @@
-package com.neogame.psp.renderer
+package com.neogame.psp
 
 import android.content.Context
 import android.graphics.Canvas
