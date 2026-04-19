@@ -1,4 +1,4 @@
-package com.neogame.psp.storage
+package com.neogame.psp
 
 import android.content.Context
 import com.google.gson.JsonParser
