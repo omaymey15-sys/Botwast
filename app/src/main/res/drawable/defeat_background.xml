@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Gradient défaite gris transparent -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="45"
+                android:startColor="#77777788"
+                android:centerColor="#66666688"
+                android:endColor="#55555588" />
+        </shape>
+    </item>
+    
+    <!-- Overlay -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#00000044" />
+        </shape>
+    </item>
+</layer-list>
