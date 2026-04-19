@@ -1,25 +1,29 @@
-name: Create file and build APK
+name: Créer fichier et builder APK
 
 on:
   workflow_dispatch:
+  push:
+    branches: [ main, master ]
 
 jobs:
-  create-and-build:
+  build:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout code
+    - name: Récupérer le code
       uses: actions/checkout@v4
     
-    - name: Set up JDK 17
+    - name: Configurer JDK 17
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
     
-    - name: Create gradient_background.xml
+    - name: Créer le dossier drawable
+      run: mkdir -p app/src/main/res/drawable
+    
+    - name: Créer gradient_background.xml proprement
       run: |
-        mkdir -p app/src/main/res/drawable
         cat > app/src/main/res/drawable/gradient_background.xml << 'EOF'
         <?xml version="1.0" encoding="utf-8"?>
         <shape xmlns:android="http://schemas.android.com/apk/res/android"
@@ -33,13 +37,32 @@ jobs:
         </shape>
         EOF
     
-    - name: Fix gradlew permissions
+    - name: Vérifier le fichier créé
+      run: |
+        echo "=== Fichier gradient_background.xml ==="
+        cat app/src/main/res/drawable/gradient_background.xml
+        echo ""
+        echo "=== Emplacement ==="
+        ls -la app/src/main/res/drawable/
+    
+    - name: Réparer les permissions de gradlew
       run: chmod +x gradlew
     
-    - name: Build APK
-      run: ./gradlew assembleDebug --no-daemon
+    - name: Supprimer l'avertissement compileSdk
+      run: |
+        if [ ! -f gradle.properties ]; then
+          touch gradle.properties
+        fi
+        if ! grep -q "android.suppressUnsupportedCompileSdk" gradle.properties; then
+          echo "android.suppressUnsupportedCompileSdk=34" >> gradle.properties
+        fi
     
-    - name: Upload APK
+    - name: Nettoyer et builder l'APK
+      run: |
+        ./gradlew clean --no-daemon
+        ./gradlew assembleDebug --no-daemon
+    
+    - name: Uploader l'APK
       uses: actions/upload-artifact@v4
       if: success()
       with:
