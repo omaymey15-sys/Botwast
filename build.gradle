@@ -1,4 +1,4 @@
-// 1. Bloc buildscript EN PREMIER
+// 1. Bloc buildscript (si vraiment nécessaire, sinon supprimer)
 buildscript {
     repositories {
         google()
@@ -10,21 +10,14 @@ buildscript {
     }
 }
 
-// 2. Bloc plugins APRÈS buildscript
+// 2. Plugins
 plugins {
     id 'com.android.application' version '8.1.0' apply false
     id 'com.android.library' version '8.1.0' apply false
     id 'org.jetbrains.kotlin.android' version '1.9.21' apply false
 }
 
-// 3. Le reste du fichier inchangé
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-        maven { url 'https://jitpack.io' }
-    }
-}
+// 3. Plus de bloc allprojects ici
 
 task clean(type: Delete) {
     delete rootProject.buildDir
