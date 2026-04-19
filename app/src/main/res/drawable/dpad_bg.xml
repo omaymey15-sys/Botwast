@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Ombre externe -->
+    <item
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp"
+        android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <solid android:color="#00000066" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+    
+    <!-- Fond principal gris transparent -->
+    <item
+        android:left="0dp"
+        android:right="0dp"
+        android:top="0dp"
+        android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="90"
+                android:startColor="#77777788"
+                android:endColor="#55555588" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+    
+    <!-- Bordure grise transparente -->
+    <item
+        android:left="2dp"
+        android:right="2dp"
+        android:top="2dp"
+        android:bottom="2dp">
+        <shape android:shape="rectangle">
+            <stroke
+                android:color="#44444499"
+                android:width="2dp" />
+            <corners android:radius="6dp" />
+        </shape>
+    </item>
+</layer-list>
