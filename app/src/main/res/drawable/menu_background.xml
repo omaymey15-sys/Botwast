@@ -11,31 +11,31 @@
                 android:endColor="#77777788" />
         </shape>
     </item>
-    
+
     <!-- Lignes de grille gris transparent -->
     <item
-        android:top="25%"
-        android:bottom="75%">
+        android:top="100dp"
+        android:bottom="300dp">
         <shape android:shape="rectangle">
             <stroke
                 android:color="#44444466"
                 android:width="1dp" />
         </shape>
     </item>
-    
+
     <item
-        android:top="50%"
-        android:bottom="50%">
+        android:top="200dp"
+        android:bottom="200dp">
         <shape android:shape="rectangle">
             <stroke
                 android:color="#44444466"
                 android:width="1dp" />
         </shape>
     </item>
-    
+
     <item
-        android:top="75%"
-        android:bottom="25%">
+        android:top="300dp"
+        android:bottom="100dp">
         <shape android:shape="rectangle">
             <stroke
                 android:color="#44444466"
