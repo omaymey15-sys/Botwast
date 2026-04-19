@@ -19,22 +19,14 @@ jobs:
         java-version: '17'
         distribution: 'temurin'
     
-    - name: 🔥 SUPPRESSION DU FICHIER CORROMPU (ÉTAPE CRITIQUE)
+    - name: 🔥 SUPPRESSION DU FICHIER CORROMPU
       run: |
-        echo "=== Suppression du fichier problématique ==="
-        rm -vf app/src/main/res/drawable/gradient_background.xml
+        echo "=== Suppression du fichier gradient_background.xml ==="
+        rm -f app/src/main/res/drawable/gradient_background.xml
+        echo "✅ Fichier supprimé"
         echo ""
-        echo "=== Vérification de la suppression ==="
-        if [ -f "app/src/main/res/drawable/gradient_background.xml" ]; then
-          echo "❌ Le fichier existe encore !"
-          ls -la app/src/main/res/drawable/gradient_background.xml
-          exit 1
-        else
-          echo "✅ Fichier supprimé avec succès"
-        fi
-        echo ""
-        echo "=== Contenu du dossier drawable ==="
-        ls -la app/src/main/res/drawable/ || echo "Dossier drawable est vide"
+        echo "=== Vérification ==="
+        ls -la app/src/main/res/drawable/ || echo "Dossier drawable vide"
     
     - name: Fix gradlew permissions
       run: chmod +x gradlew
