@@ -24,6 +24,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -42,17 +45,39 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 💥 CRASH HANDLER GLOBAL
+        // 💥 CRASH HANDLER PRO (stable + log file)
         Thread.setDefaultUncaughtExceptionHandler { _, e ->
-            Logger.e("💥 CRASH GLOBAL: ${e.message}")
-            e.printStackTrace()
+
+            val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+                .format(Date())
+
+            val crashLog = """
+                ===== CRASH REPORT =====
+                TIME: $time
+                
+                ERROR: ${e.message}
+                
+                STACK:
+                ${e.stackTraceToString()}
+                =======================
+            """.trimIndent()
+
+            try {
+                val file = File(getExternalFilesDir(null), "crash_log.txt")
+                file.appendText("\n\n$crashLog")
+            } catch (_: Exception) {}
+
+            Logger.e("💥 CRASH: ${e.message}")
 
             runOnUiThread {
-                Toast.makeText(this, "CRASH: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Crash détecté !", Toast.LENGTH_LONG).show()
 
+                // 👉 On évite boucle crash (IMPORTANT)
                 val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("crash_error", e.toString())
+                intent.putExtra("crash_error", e.message)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
+
                 finish()
             }
         }
@@ -75,12 +100,12 @@ class MainActivity : AppCompatActivity() {
         btnAddGame = findViewById(R.id.btn_add_game)
         txtTitle = findViewById(R.id.txt_title)
 
-        // 💥 afficher crash si existant
         val error = intent.getStringExtra("crash_error")
-        if (error != null) {
-            txtTitle.text = "💥 CRASH DETECTÉ\n$error"
+
+        txtTitle.text = if (error != null) {
+            "💥 CRASH DETECTÉ\n$error"
         } else {
-            txtTitle.text = "🎮 ${Constants.APP_NAME}"
+            "🎮 ${Constants.APP_NAME}"
         }
 
         txtTitle.textSize = 28f
@@ -110,19 +135,23 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun requestStoragePermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
-            if (!Environment.isExternalStorageManager()) {
-                startActivity(
-                    Intent(android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                if (!Environment.isExternalStorageManager()) {
+                    startActivity(
+                        Intent(android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION)
+                    )
+                }
+
+            } else {
+                requestPermissions(
+                    arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
+                    100
                 )
             }
-
-        } else {
-            requestPermissions(
-                arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
-                100
-            )
+        } catch (e: Exception) {
+            Logger.e("Permission error: ${e.message}")
         }
     }
 
@@ -157,6 +186,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
             } catch (e: Exception) {
+
                 Logger.e("SCAN CRASH: ${e.message}")
 
                 withContext(Dispatchers.Main) {
