@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -40,6 +41,22 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 💥 CRASH HANDLER GLOBAL
+        Thread.setDefaultUncaughtExceptionHandler { _, e ->
+            Logger.e("💥 CRASH GLOBAL: ${e.message}")
+            e.printStackTrace()
+
+            runOnUiThread {
+                Toast.makeText(this, "CRASH: ${e.message}", Toast.LENGTH_LONG).show()
+
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra("crash_error", e.toString())
+                startActivity(intent)
+                finish()
+            }
+        }
+
         setContentView(R.layout.activity_main)
 
         gameManager = GameManager(this)
@@ -58,12 +75,20 @@ class MainActivity : AppCompatActivity() {
         btnAddGame = findViewById(R.id.btn_add_game)
         txtTitle = findViewById(R.id.txt_title)
 
-        txtTitle.text = "🎮 ${Constants.APP_NAME}"
+        // 💥 afficher crash si existant
+        val error = intent.getStringExtra("crash_error")
+        if (error != null) {
+            txtTitle.text = "💥 CRASH DETECTÉ\n$error"
+        } else {
+            txtTitle.text = "🎮 ${Constants.APP_NAME}"
+        }
+
         txtTitle.textSize = 28f
 
         btnAddGame.apply {
             text = "➕ Add Game"
             background = ContextCompat.getDrawable(this@MainActivity, R.drawable.button_a)
+
             setOnClickListener {
                 addGameLauncher.launch(
                     Intent(this@MainActivity, AddGameActivity::class.java)
@@ -94,7 +119,6 @@ class MainActivity : AppCompatActivity() {
             }
 
         } else {
-            // Android < 10
             requestPermissions(
                 arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE),
                 100
@@ -107,27 +131,38 @@ class MainActivity : AppCompatActivity() {
 
         lifecycleScope.launch(Dispatchers.Default) {
 
-            val games = mutableListOf<String>()
-            val gamesDir = FileUtils.getGamesDirectory(this@MainActivity)
+            try {
+                val games = mutableListOf<String>()
+                val gamesDir = FileUtils.getGamesDirectory(this@MainActivity)
 
-            if (gamesDir.exists()) {
-                gamesDir.listFiles()?.forEach { file ->
-                    if (file.extension == Constants.ZIP_EXTENSION) {
+                if (gamesDir.exists()) {
+                    gamesDir.listFiles()?.forEach { file ->
+
                         try {
-                            if (gameManager.isValidGameZip(file.absolutePath)) {
-                                games.add(file.absolutePath)
+                            if (file.extension == Constants.ZIP_EXTENSION) {
+                                if (gameManager.isValidGameZip(file.absolutePath)) {
+                                    games.add(file.absolutePath)
+                                }
                             }
                         } catch (e: Exception) {
-                            Logger.e("Scan error: ${e.message}")
+                            Logger.e("File error: ${e.message}")
                         }
                     }
                 }
-            }
 
-            withContext(Dispatchers.Main) {
-                gameAdapter.setGames(games)
-                progressBar.visibility = View.GONE
-                Logger.i("Found ${games.size} games")
+                withContext(Dispatchers.Main) {
+                    gameAdapter.setGames(games)
+                    progressBar.visibility = View.GONE
+                    Logger.i("Found ${games.size} games")
+                }
+
+            } catch (e: Exception) {
+                Logger.e("SCAN CRASH: ${e.message}")
+
+                withContext(Dispatchers.Main) {
+                    progressBar.visibility = View.GONE
+                    txtTitle.text = "Scan error: ${e.message}"
+                }
             }
         }
     }
