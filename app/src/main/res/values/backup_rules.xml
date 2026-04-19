@@ -3,4 +3,3 @@
     <include domain="file" path="." />
     <exclude domain="file" path="cache" />
     <exclude domain="file" path="code_cache" />
-</full-backup-content>
