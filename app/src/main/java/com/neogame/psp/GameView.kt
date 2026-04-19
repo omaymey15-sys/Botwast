@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.view.View
 import com.neogame.psp.emulator.GameEngine
 import com.neogame.psp.utils.Logger
-import com.neogame.psp.renders.RenderEngine
+import com.neogame.psp.renderer.RenderEngine
 /**
  * Vue de jeu
  * Gère l'affichage et la boucle de jeu
