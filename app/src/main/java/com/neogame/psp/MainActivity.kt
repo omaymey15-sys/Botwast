@@ -24,9 +24,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,95 +40,99 @@ class MainActivity : AppCompatActivity() {
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        // 💥 CRASH HANDLER PRO (stable + log file)
+        // 💥 CRASH HANDLER GLOBAL (anti fermeture brutale)
         Thread.setDefaultUncaughtExceptionHandler { _, e ->
 
-            val time = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-                .format(Date())
-
-            val crashLog = """
-                ===== CRASH REPORT =====
-                TIME: $time
-                
-                ERROR: ${e.message}
-                
-                STACK:
-                ${e.stackTraceToString()}
-                =======================
-            """.trimIndent()
+            e.printStackTrace()
 
             try {
                 val file = File(getExternalFilesDir(null), "crash_log.txt")
-                file.appendText("\n\n$crashLog")
+                file.appendText("\n\n${e.stackTraceToString()}")
             } catch (_: Exception) {}
 
-            Logger.e("💥 CRASH: ${e.message}")
-
             runOnUiThread {
-                Toast.makeText(this, "Crash détecté !", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Crash détecté", Toast.LENGTH_LONG).show()
 
-                // 👉 On évite boucle crash (IMPORTANT)
-                val intent = Intent(this, MainActivity::class.java)
-                intent.putExtra("crash_error", e.message)
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                val intent = Intent(this, CrashActivity::class.java)
+                intent.putExtra("error", e.stackTraceToString())
                 startActivity(intent)
 
                 finish()
             }
+
+            Runtime.getRuntime().exit(0)
         }
 
-        setContentView(R.layout.activity_main)
+        super.onCreate(savedInstanceState)
 
-        gameManager = GameManager(this)
+        try {
+            setContentView(R.layout.activity_main)
 
-        initViews()
-        setupRecycler()
-        requestStoragePermissions()
-        scanGames()
+            gameManager = GameManager(this)
 
-        Logger.i("MainActivity created - Console PSP")
+            initViews()
+            setupRecycler()
+            requestStoragePermissions()
+            scanGames()
+
+            Logger.i("MainActivity started OK")
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+
+            val intent = Intent(this, CrashActivity::class.java)
+            intent.putExtra("error", e.stackTraceToString())
+            startActivity(intent)
+
+            finish()
+        }
     }
 
     private fun initViews() {
-        gamesRecycler = findViewById(R.id.games_grid)
-        progressBar = findViewById(R.id.progress_loading)
-        btnAddGame = findViewById(R.id.btn_add_game)
-        txtTitle = findViewById(R.id.txt_title)
+        try {
+            gamesRecycler = findViewById(R.id.games_grid)
+            progressBar = findViewById(R.id.progress_loading)
+            btnAddGame = findViewById(R.id.btn_add_game)
+            txtTitle = findViewById(R.id.txt_title)
 
-        val error = intent.getStringExtra("crash_error")
+            val error = intent.getStringExtra("crash_error")
 
-        txtTitle.text = if (error != null) {
-            "💥 CRASH DETECTÉ\n$error"
-        } else {
-            "🎮 ${Constants.APP_NAME}"
-        }
+            txtTitle.text = if (error != null) {
+                "💥 CRASH DETECTED"
+            } else {
+                "🎮 ${Constants.APP_NAME}"
+            }
 
-        txtTitle.textSize = 28f
+            btnAddGame.text = "➕ Add Game"
 
-        btnAddGame.apply {
-            text = "➕ Add Game"
-            background = ContextCompat.getDrawable(this@MainActivity, R.drawable.button_a)
-
-            setOnClickListener {
+            btnAddGame.setOnClickListener {
                 addGameLauncher.launch(
-                    Intent(this@MainActivity, AddGameActivity::class.java)
+                    Intent(this, AddGameActivity::class.java)
                 )
             }
+
+        } catch (e: Exception) {
+            Logger.e("initViews error: ${e.message}")
         }
     }
 
     private fun setupRecycler() {
-        gamesRecycler.layoutManager = GridLayoutManager(this, 2)
+        try {
+            gamesRecycler.layoutManager = GridLayoutManager(this, 2)
 
-        gameAdapter = GameGridAdapter(emptyList()) { gamePath ->
-            val intent = Intent(this, EmulatorActivity::class.java)
-            intent.putExtra("game_path", gamePath)
-            startActivity(intent)
+            gameAdapter = GameGridAdapter(emptyList()) { gamePath ->
+                startActivity(
+                    Intent(this, EmulatorActivity::class.java)
+                        .putExtra("game_path", gamePath)
+                )
+            }
+
+            gamesRecycler.adapter = gameAdapter
+
+        } catch (e: Exception) {
+            Logger.e("Recycler error: ${e.message}")
         }
-
-        gamesRecycler.adapter = gameAdapter
     }
 
     private fun requestStoragePermissions() {
@@ -150,23 +151,26 @@ class MainActivity : AppCompatActivity() {
                     100
                 )
             }
+
         } catch (e: Exception) {
             Logger.e("Permission error: ${e.message}")
         }
     }
 
     private fun scanGames() {
+
         progressBar.visibility = View.VISIBLE
 
         lifecycleScope.launch(Dispatchers.Default) {
 
             try {
                 val games = mutableListOf<String>()
+
                 val gamesDir = FileUtils.getGamesDirectory(this@MainActivity)
 
-                if (gamesDir.exists()) {
-                    gamesDir.listFiles()?.forEach { file ->
+                if (gamesDir != null && gamesDir.exists()) {
 
+                    gamesDir.listFiles()?.forEach { file ->
                         try {
                             if (file.extension == Constants.ZIP_EXTENSION) {
                                 if (gameManager.isValidGameZip(file.absolutePath)) {
@@ -182,17 +186,18 @@ class MainActivity : AppCompatActivity() {
                 withContext(Dispatchers.Main) {
                     gameAdapter.setGames(games)
                     progressBar.visibility = View.GONE
-                    Logger.i("Found ${games.size} games")
+
+                    Logger.i("Games found: ${games.size}")
                 }
 
             } catch (e: Exception) {
 
-                Logger.e("SCAN CRASH: ${e.message}")
-
                 withContext(Dispatchers.Main) {
                     progressBar.visibility = View.GONE
-                    txtTitle.text = "Scan error: ${e.message}"
+                    txtTitle.text = "SCAN ERROR"
                 }
+
+                Logger.e("scanGames crash: ${e.message}")
             }
         }
     }
