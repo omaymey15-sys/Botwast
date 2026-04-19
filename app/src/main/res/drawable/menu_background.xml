@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Fond gradient gris transparent -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="135"
+                android:startColor="#55555588"
+                android:centerColor="#66666688"
+                android:endColor="#77777788" />
+        </shape>
+    </item>
+    
+    <!-- Lignes de grille gris transparent -->
+    <item
+        android:top="25%"
+        android:bottom="75%">
+        <shape android:shape="rectangle">
+            <stroke
+                android:color="#44444466"
+                android:width="1dp" />
+        </shape>
+    </item>
+    
+    <item
+        android:top="50%"
+        android:bottom="50%">
+        <shape android:shape="rectangle">
+            <stroke
+                android:color="#44444466"
+                android:width="1dp" />
+        </shape>
+    </item>
+    
+    <item
+        android:top="75%"
+        android:bottom="25%">
+        <shape android:shape="rectangle">
+            <stroke
+                android:color="#44444466"
+                android:width="1dp" />
+        </shape>
+    </item>
+</layer-list>
