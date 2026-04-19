@@ -74,8 +74,8 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3'
 
     // Filament (3D)
-    implementation 'com.google.android.filament:filament-android:1.48.0'
-    implementation 'com.google.android.filament:filament-utils-android:1.48.0'
+    implementation 'com.google.android.filament:filament-android:1.56.1'
+    implementation 'com.google.android.filament:filament-utils-android:1.56.1'
 
     // JSON
     implementation 'com.google.code.gson:gson:2.10.1'
