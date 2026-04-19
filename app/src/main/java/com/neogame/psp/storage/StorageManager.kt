@@ -1,15 +1,11 @@
 package com.neogame.psp.storage
 
 /**
- * Base de données de jeux
- * Gère la base de données des jeux
+ * Gestionnaire de stockage
+ * Gère l'accès au stockage
  */
-class GameDatabase {
-    fun saveGame(gameName: String): Boolean {
-        return true
-    }
-
-    fun loadGame(gameName: String): Boolean {
-        return true
+class StorageManager {
+    fun getStoragePath(): String {
+        return ""
     }
 }
