@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    
+    <!-- Gradient gris transparent -->
+    <gradient
+        android:type="linear"
+        android:angle="0"
+        android:startColor="#88888888"
+        android:centerColor="#99999988"
+        android:endColor="#aaaaaaaa" />
+    
+    <!-- Coin arrondi -->
+    <corners android:radius="4dp" />
+</shape>
