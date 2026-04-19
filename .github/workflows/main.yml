@@ -1,184 +1,119 @@
-name: 🚀 Build APK Avancé
+name: Android CI - Fast Build
 
 on:
-  workflow_dispatch:
-    inputs:
-      buildType:
-        description: 'Type de build'
-        required: true
-        default: 'debug'
-        type: choice
-        options:
-          - debug
-          - release
-      cleanBuild:
-        description: 'Nettoyer avant de builder'
-        required: true
-        default: true
-        type: boolean
-      uploadArtifact:
-        description: 'Uploader l'APK'
-        required: true
-        default: true
-        type: boolean
-  
   push:
-    branches: [ main, master ]
+    branches: [main, develop]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, develop]
 
 jobs:
   build:
-    name: 📦 Build Android APK
     runs-on: ubuntu-latest
-    
-    strategy:
-      matrix:
-        api-level: [33]
-        target: [default]
-    
-    steps:
-      - name: 📥 Checkout du code
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          submodules: recursive
-      
-      - name: ☕ Setup JDK 17
-        uses: actions/setup-java@v4
-        with:
-          java-version: '17'
-          distribution: 'temurin'
-          cache: gradle
-      
-      - name: 🔧 Setup Gradle
-        uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: 8.1
-          cache-read-only: false
-      
-      - name: 🧹 Nettoyage (optionnel)
-        if: inputs.cleanBuild == true || github.event_name == 'push'
-        run: |
-          echo "🧹 Nettoyage du projet..."
-          chmod +x gradlew
-          ./gradlew clean --no-daemon
-          rm -rf .gradle
-          echo "✅ Nettoyage terminé"
-      
-      - name: 🔧 Fix des permissions
-        run: chmod +x gradlew
-      
-      - name: 📝 Configuration gradle.properties
-        run: |
-          echo "🔧 Configuration des propriétés..."
-          {
-            echo "android.useAndroidX=true"
-            echo "android.enableJetifier=true"
-            echo "android.suppressUnsupportedCompileSdk=34"
-            echo "org.gradle.jvmargs=-Xmx2048m -XX:MaxMetaspaceSize=512m"
-            echo "org.gradle.parallel=true"
-            echo "org.gradle.caching=true"
-            echo "org.gradle.daemon=false"
-          } >> gradle.properties
-          cat gradle.properties
-      
-      - name: 🔍 Vérification des fichiers sources
-        run: |
-          echo "🔍 Vérification des fichiers problématiques..."
-          if [ -f "app/src/main/res/drawable/gradient_background.xml" ]; then
-            echo "⚠️ Fichier gradient_background.xml trouvé, vérification..."
-            file app/src/main/res/drawable/gradient_background.xml
-            head -c 100 app/src/main/res/drawable/gradient_background.xml | xxd
-          else
-            echo "✅ Aucun fichier problématique trouvé"
-          fi
-      
-      - name: 🔨 Build APK ${{ inputs.buildType || 'debug' }}
-        run: |
-          echo "🏗️ Construction de l'APK en mode ${{ inputs.buildType || 'debug' }}..."
-          
-          if [ "${{ inputs.buildType }}" = "release" ]; then
-            ./gradlew assembleRelease --no-daemon --stacktrace
-          else
-            ./gradlew assembleDebug --no-daemon --stacktrace
-          fi
-          
-          echo "✅ Build terminé !"
-      
-      - name: 📊 Analyse des résultats
-        run: |
-          echo "📊 Résultats du build :"
-          echo "=== APK générés ==="
-          find app/build/outputs/apk -name "*.apk" -type f -exec ls -lh {} \;
-          echo ""
-          echo "=== Taille des APK ==="
-          find app/build/outputs/apk -name "*.apk" -type f -exec du -h {} \;
-      
-      - name: 📤 Upload APK
-        if: inputs.uploadArtifact == true || github.event_name != 'workflow_dispatch'
-        uses: actions/upload-artifact@v4
-        with:
-          name: app-${{ inputs.buildType || 'debug' }}-${{ github.run_number }}
-          path: |
-            app/build/outputs/apk/debug/*.apk
-            app/build/outputs/apk/release/*.apk
-          retention-days: 30
-          compression-level: 6
-      
-      - name: 📱 Setup Android Emulator (optionnel)
-        if: false
-        uses: reactivecircus/android-emulator-runner@v2
-        with:
-          api-level: ${{ matrix.api-level }}
-          target: ${{ matrix.target }}
-          arch: x86_64
-          profile: Nexus 6
-          script: echo "Emulator ready"
-      
-      - name: 📈 Cache Gradle
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.gradle/caches
-            ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
-      
-      - name: 📝 Générer des métadonnées
-        run: |
-          echo "📝 Génération des métadonnées..."
-          {
-            echo "## 📦 Informations du build"
-            echo ""
-            echo "- **Date**: $(date)"
-            echo "- **Build Type**: ${{ inputs.buildType || 'debug' }}"
-            echo "- **Run Number**: ${{ github.run_number }}"
-            echo "- **Branch**: ${{ github.ref_name }}"
-            echo "- **Commit**: ${{ github.sha }}"
-            echo ""
-            echo "### 📊 Statistiques"
-            find app/build/outputs/apk -name "*.apk" -type f -exec ls -lh {} \;
-          } > build_info.md
-      
-      - name: 📤 Upload des métadonnées
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-info
-          path: build_info.md
-          retention-days: 30
 
-  notify:
-    name: 📢 Notification
-    needs: build
-    if: always()
-    runs-on: ubuntu-latest
     steps:
-      - name: ✅ Build Status
-        run: |
-          if [ "${{ needs.build.result }}" = "success" ]; then
-            echo "🎉 Build réussi !"
-          else
-            echo "❌ Build échoué !"
-          fi
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Setup Java JDK
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+
+    - name: Enable Data Binding in build.gradle
+      run: |
+        # Vérifier si dataBinding est déjà présent
+        if ! grep -q "dataBinding" app/build.gradle; then
+          # Ajouter dataBinding dans le bloc android
+          sed -i '/android {/a \    buildFeatures {\n        dataBinding = true\n    }' app/build.gradle
+        else
+          # Remplacer dataBinding false par true si nécessaire
+          sed -i 's/dataBinding = false/dataBinding = true/g' app/build.gradle
+        fi
+        echo "=== build.gradle (extrait) ==="
+        grep -A 3 "buildFeatures" app/build.gradle || echo "buildFeatures ajouté"
+
+    - name: Fix item_rule.xml encoding
+      run: |
+        cat > app/src/main/res/layout/item_rule.xml << 'EOF'
+        <?xml version="1.0" encoding="utf-8"?>
+        <layout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
+        
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/root"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
+        
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="12dp">
+        
+                    <TextView
+                        android:id="@+id/ruleText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SI Salut - Bonjour"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+        
+                    <TextView
+                        android:id="@+id/rulePriority"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:text="Priorite 1"
+                        android:textSize="12sp" />
+        
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+        
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/editButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:layout_weight="1"
+                            android:text="Modifier"
+                            android:textSize="12sp"
+                            app:cornerRadius="4dp" />
+        
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/deleteButton"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:layout_weight="1"
+                            android:text="Supprimer"
+                            android:textSize="12sp"
+                            app:cornerRadius="4dp" />
+        
+                    </LinearLayout>
+        
+                </LinearLayout>
+        
+            </com.google.android.material.card.MaterialCardView>
+        
+        </layout>
+        EOF
+
+    - name: Build with Gradle
+      run: ./gradlew assembleDebug --no-daemon
+
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: botwast-debug.apk
+        path: app/build/outputs/apk/debug/app-debug.apk
