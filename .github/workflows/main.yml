@@ -5,7 +5,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-  workflow_dispatch:  # Permet d'exécuter manuellement
+  workflow_dispatch:
 
 jobs:
   build:
@@ -20,6 +20,11 @@ jobs:
       with:
         java-version: '17'
         distribution: 'temurin'
+    
+    - name: Fix gradlew permissions
+      run: |
+        echo "🔧 Correction des permissions de gradlew..."
+        chmod +x gradlew
     
     - name: Clean resources directory
       run: |
@@ -49,15 +54,12 @@ jobs:
         ls -la app/src/main/res/drawable/gradient_background.xml
         echo "📄 Contenu du fichier :"
         cat app/src/main/res/drawable/gradient_background.xml
-        echo "🔍 Type de fichier :"
-        file app/src/main/res/drawable/gradient_background.xml
     
     - name: Clean Gradle build cache
       run: |
         echo "🧹 Nettoyage du cache Gradle..."
-        ./gradlew clean
+        ./gradlew clean --no-daemon
         rm -rf .gradle
-        rm -rf ~/.gradle/caches/
     
     - name: Suppress compileSdk warning
       run: |
@@ -65,7 +67,9 @@ jobs:
         if [ ! -f gradle.properties ]; then
           touch gradle.properties
         fi
-        echo "android.suppressUnsupportedCompileSdk=34" >> gradle.properties
+        if ! grep -q "android.suppressUnsupportedCompileSdk" gradle.properties; then
+          echo "android.suppressUnsupportedCompileSdk=34" >> gradle.properties
+        fi
     
     - name: Build debug APK
       run: |
