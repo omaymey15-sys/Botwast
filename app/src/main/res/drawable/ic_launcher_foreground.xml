@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    
+    <!-- Cercle de base gris -->
+    <path
+        android:fillColor="#88888888"
+        android:pathData="M54,9C31.925,9 14,26.925 14,49C14,71.075 31.925,89 54,89C76.075,89 94,71.075 94,49C94,26.925 76.075,9 54,9ZM54,84C35.25,84 20,68.75 20,50C20,31.25 35.25,16 54,16C72.75,16 88,31.25 88,50C88,68.75 72.75,84 54,84Z" />
+    
+    <!-- Gamepad buttons gris -->
+    <path
+        android:fillColor="#55555588"
+        android:pathData="M40,40C37.791,40 36,41.791 36,44C36,46.209 37.791,48 40,48C42.209,48 44,46.209 44,44C44,41.791 42.209,40 40,40ZM68,40C65.791,40 64,41.791 64,44C64,46.209 65.791,48 68,48C70.209,48 72,46.209 72,44C72,41.791 70.209,40 68,40ZM54,52C51.791,52 50,53.791 50,56C50,58.209 51.791,60 54,60C56.209,60 58,58.209 58,56C58,53.791 56.209,52 54,52Z" />
+    
+    <!-- Boutons ABXY gris -->
+    <circle
+        android:fillColor="#77777788"
+        android:cx="68"
+        android:cy="32"
+        android:r="3" />
+    <circle
+        android:fillColor="#77777788"
+        android:cx="60"
+        android:cy="40"
+        android:r="3" />
+    <circle
+        android:fillColor="#77777788"
+        android:cx="76"
+        android:cy="40"
+        android:r="3" />
+    <circle
+        android:fillColor="#77777788"
+        android:cx="68"
+        android:cy="48"
+        android:r="3" />
+</vector>
