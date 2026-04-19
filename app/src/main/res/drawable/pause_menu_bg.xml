@@ -6,13 +6,13 @@
             <solid android:color="#00000099" />
         </shape>
     </item>
-    
+
     <!-- Panneau contenu gris transparent -->
     <item
         android:left="32dp"
         android:right="32dp"
-        android:top="40%"
-        android:bottom="40%">
+        android:top="100dp"
+        android:bottom="100dp">
         <shape android:shape="rectangle">
             <gradient
                 android:type="linear"
