@@ -8,7 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import com.neogame.psp.emulator.GameEngine
 import com.neogame.psp.loaders.ZipGameLoader
 import com.neogame.psp.renderer.RenderEngine
-import com.neogame.psp.ui.GameView
+import com.neogame.psp.GameView
 import com.neogame.psp.ui.PSPControllerView
 import com.neogame.psp.utils.Logger
 import com.google.gson.JsonParser
