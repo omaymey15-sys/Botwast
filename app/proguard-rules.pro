@@ -1,8 +1,20 @@
 # Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in ${sdk.dir}/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
+-keepclassmembers class * {
+  *** **(kotlin.coroutines.Continuation);
+}
 
-# Add any project specific keep options here:
--keep class org.json.** { *; }
+# Keep Filament classes
+-keep class com.google.android.filament.** { *; }
+-keepclassmembers class com.google.android.filament.** { *; }
+
+# Keep GSON classes
+-keep class com.google.gson.** { *; }
+-keepclassmembers class com.google.gson.** { *; }
+
+# Keep Timber logging
+-keep class timber.log.** { *; }
+
+# Keep game engine classes
+-keep class com.neogame.psp.emulator.** { *; }
+-keep class com.neogame.psp.renderer.** { *; }
+-keep class com.neogame.psp.ui.** { *; }
