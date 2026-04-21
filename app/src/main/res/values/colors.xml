@@ -1,26 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary -->
     <color name="primary">#55555588</color>
     <color name="primary_dark">#44444488</color>
     <color name="secondary">#88888888</color>
-
-    <!-- Background -->
     <color name="background">#55555588</color>
     <color name="surface">#66666688</color>
-
-    <!-- Text -->
     <color name="text_primary">#ffffff</color>
     <color name="text_secondary">#cccccccc</color>
-
-    <!-- Status -->
-    <color name="success">#33ff33</color>
-    <color name="error">#ff3333</color>
-    <color name="warning">#ffdd33</color>
-    <color name="info">#00d9ff</color>
-
-    <!-- Transparent -->
-    <color name="transparent">#00000000</color>
-    <color name="white">#ffffff</color>
-    <color name="black">#000000</color>
 </resources>
