@@ -1,51 +1,78 @@
 package com.neogame.psp
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.util.AttributeSet
+import android.view.MotionEvent
+import android.widget.FrameLayout
+import kotlin.math.sqrt
 
-class GameGridAdapter(
-    private var games: List<String>,
-    private val onGameClick: (String) -> Unit
-) : RecyclerView.Adapter<GameGridAdapter.ViewHolder>() {
+class PSPControllerView(context: Context, attrs: AttributeSet?) : FrameLayout(context, attrs) {
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val gameTitle: TextView = itemView.findViewById(R.id.game_title)
-        private val gameType: TextView = itemView.findViewById(R.id.game_type)
-        private val btnPlay: Button = itemView.findViewById(R.id.btn_play)
+    private var inputCallback: ((String, Float) -> Unit)? = null
+    private val paint = Paint().apply {
+        isAntiAlias = true
+        color = Color.parseColor("#88888888")
+        strokeWidth = 2f
+    }
 
-        fun bind(gamePath: String) {
-            CoroutineScope(Dispatchers.Main).launch {
-                val gameManager = GameManager(itemView.context)
-                val gameInfo = gameManager.getGameInfo(gamePath)
-                if (gameInfo != null) {
-                    gameTitle.text = gameInfo.first
-                    gameType.text = "📌 ${gameInfo.second}"
+    fun setInputCallback(callback: (String, Float) -> Unit) {
+        inputCallback = callback
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        val cx = width / 4f
+        val cy = height - 150f
+        
+        // D-Pad
+        paint.color = Color.parseColor("#44444499")
+        canvas.drawCircle(cx, cy, 60f, paint)
+        
+        // Buttons
+        val bx = width * 3f / 4f
+        val by = height - 150f
+        paint.color = Color.parseColor("#88888888")
+        canvas.drawCircle(bx - 80f, by, 30f, paint)
+        canvas.drawCircle(bx, by - 80f, 30f, paint)
+        canvas.drawCircle(bx + 80f, by, 30f, paint)
+        canvas.drawCircle(bx, by + 80f, 30f, paint)
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        event?.let {
+            when (it.action) {
+                MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE -> {
+                    val cx = width / 4f
+                    val cy = height - 150f
+                    val bx = width * 3f / 4f
+                    val by = height - 150f
+
+                    val dDist = sqrt((it.x - cx) * (it.x - cx) + (it.y - cy) * (it.y - cy))
+                    if (dDist < 80f) {
+                        val angle = Math.atan2((it.y - cy).toDouble(), (it.x - cx).toDouble())
+                        when {
+                            angle > -Math.PI / 4 && angle <= Math.PI / 4 -> inputCallback?.invoke("RIGHT", 1f)
+                            angle > Math.PI / 4 && angle <= 3 * Math.PI / 4 -> inputCallback?.invoke("DOWN", 1f)
+                            angle > -3 * Math.PI / 4 && angle <= -Math.PI / 4 -> inputCallback?.invoke("UP", 1f)
+                            else -> inputCallback?.invoke("LEFT", 1f)
+                        }
+                    }
+
+                    listOf(
+                        "BUTTON_A" to Pair(bx + 80f, by),
+                        "BUTTON_B" to Pair(bx, by + 80f),
+                        "BUTTON_X" to Pair(bx - 80f, by),
+                        "BUTTON_Y" to Pair(bx, by - 80f)
+                    ).forEach { (label, pos) ->
+                        val dist = sqrt((it.x - pos.first) * (it.x - pos.first) + (it.y - pos.second) * (it.y - pos.second))
+                        if (dist < 40f) inputCallback?.invoke(label, 1f)
+                    }
                 }
             }
-            btnPlay.setOnClickListener { onGameClick(gamePath) }
         }
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_game, parent, false)
-        return ViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(games[position])
-    }
-
-    override fun getItemCount(): Int = games.size
-
-    fun setGames(newGames: List<String>) {
-        games = newGames
-        notifyDataSetChanged()
+        return true
     }
 }
