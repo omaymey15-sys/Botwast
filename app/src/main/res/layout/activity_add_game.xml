@@ -5,65 +5,43 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:gravity="center"
-    android:background="@drawable/gradient_background">
+    android:background="@color/background">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="📦 Ajouter Jeu"
+        android:text="📦 Add Game"
         android:textSize="24sp"
         android:textStyle="bold"
         android:textColor="@color/text_primary"
-        android:layout_marginBottom="32dp" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sélectionnez un fichier ZIP"
-        android:textSize="14sp"
-        android:textColor="@color/text_secondary"
         android:layout_marginBottom="32dp" />
 
     <Button
         android:id="@+id/btn_select_file"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="📂 Sélectionner"
-        android:textColor="@color/text_primary"
-        android:textSize="14sp"
-        android:padding="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/button_x" />
+        android:text="📂 Select ZIP"
+        android:textColor="@color/text_primary" />
 
     <ProgressBar
         android:id="@+id/progress_import"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_marginBottom="16dp" />
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/text_status"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:textSize="12sp"
-        android:textColor="@color/text_secondary"
-        android:layout_marginBottom="32dp" />
+        android:textColor="@color/text_secondary" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+    <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
 
     <Button
         android:id="@+id/btn_cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Annuler"
-        android:textColor="@color/text_primary"
-        android:textSize="14sp"
-        android:padding="16dp"
-        android:background="@drawable/button_b" />
+        android:text="Cancel"
+        android:textColor="@color/text_primary" />
 
 </LinearLayout>
