@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/gradient_background">
+    android:background="@color/background">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -25,10 +25,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
             android:layout_marginEnd="16dp"
-            android:text="➕ Ajouter"
-            android:textColor="@color/text_primary"
-            android:textSize="12sp"
-            android:padding="8dp" />
+            android:text="➕"
+            android:textColor="@color/text_primary" />
 
     </FrameLayout>
 
