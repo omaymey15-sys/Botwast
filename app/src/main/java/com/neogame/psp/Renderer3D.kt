@@ -5,7 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import com.google.android.filament.*
-import com.google.android.filament.utils.EntityManager
+import com.google.android.filament.EntityManager
 
 class Renderer3D(private val context: Context) : BaseRenderer() {
 
